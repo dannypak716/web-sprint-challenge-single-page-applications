@@ -15,12 +15,12 @@ const formSchema = yup.object().shape({
     special: yup
         .string()
         .trim(),
-    // pepperoni: yup.boolean(),
-    // chicken: yup.boolean(),
-    // olives: yup.boolean(),
-    // onions: yup.boolean(),
-    // mushrooms: yup.boolean(),
-    // peppers: yup.boolean(),
+    pepperoni: yup.boolean(),
+    chicken: yup.boolean(),
+    olives: yup.boolean(),
+    onions: yup.boolean(),
+    mushrooms: yup.boolean(),
+    peppers: yup.boolean(),
 })
 
 export default formSchema;

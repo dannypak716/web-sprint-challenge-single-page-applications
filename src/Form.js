@@ -29,7 +29,7 @@ const initialDisabled = true;
 
 
 export default function Form(){
-    const [values, setValues] = useState([]);
+    const [values, setValues] = useState({});
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [disabled, setDisabled] = useState(initialDisabled);
@@ -41,7 +41,7 @@ export default function Form(){
           .validate(value)
           .then(() => setFormErrors({ ...formErrors, [name]: '' }))
           .catch(err => setFormErrors({ ...formErrors, [name]: err.errors[0] }))
-      }
+    }
 
     const inputChange = (name, value) => {
         validate(name, value);
@@ -49,7 +49,7 @@ export default function Form(){
           ...formValues,
           [name]: value
         })
-      }
+    }
 
     const onChange = evt => {
         const { name, value, checked, type } = evt.target;
@@ -58,18 +58,16 @@ export default function Form(){
     }
 
     const postNewOrder = newOrder => {
-        // 🔥 STEP 6- IMPLEMENT! ON SUCCESS ADD NEWLY CREATED FRIEND TO STATE
-        //    helper to [POST] `newFriend` to `http://buddies.com/api/friends`
-        //    and regardless of success or failure, the form should reset
         axios.post('https://reqres.in/api/orders', newOrder)
           .then(res => {
-            setValues([res, ...newOrder]);
+            setValues([res.data, ...newOrder]);
             setFormValues(initialFormValues);
+            console.log(res.data);
           }).catch(err => {
             console.error(err);
             setFormValues(initialFormValues);
           })
-      }
+    }
     
     const formSubmit = () => {
         const newOrder = {
@@ -82,8 +80,8 @@ export default function Form(){
         postNewOrder(newOrder);
     }
 
-    const onSubmit = evt => {
-        evt.preventDefault()
+    const onSubmit = event => {
+        event.preventDefault()
         formSubmit()
     }
 
@@ -101,13 +99,13 @@ export default function Form(){
                 <button className='help-button'>Help</button>
                 </nav>
             </header>
-            <form id='pizza-form'>
+            <form id='pizza-form' onSubmit={onSubmit}>
                 <div>
                     <h1>BUILD YOUR OWN PIZZA</h1>
                 </div>
                 <div>
                     <p>Name for the order:</p>
-                    <input id='name-input' type='text' value={name} onChange={onChange}/>
+                    <input id='name-input' name='name' type='text' onChange={onChange}/>
                 </div>
                 <div>
                     <h2>Choice of Size</h2>
@@ -152,7 +150,7 @@ export default function Form(){
                     <input id='special-text' name='special' type='text' value={special} placeholder='Anything else?' onChange={onChange}/>
                 </div>
                 <footer>
-                    <button id='order-button' onSubmit={onSubmit}>Add to Order</button>
+                    <button id='order-button' type='submit'>Add to Order</button>
                 </footer>
             </form>
         </div>
