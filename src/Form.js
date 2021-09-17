@@ -62,8 +62,6 @@ export default function Form(){
           .then(res => {
             setValues([res.data]);
             setFormValues(initialFormValues);
-            setValues(initialFormValues);
-            console.log(res.data);
           }).catch(err => {
             console.error(err);
             setFormValues(initialFormValues);
@@ -107,6 +105,7 @@ export default function Form(){
                 <div>
                     <p>Name for the order:</p>
                     <input id='name-input' name='name' type='text' onChange={onChange}/>
+                    <div>{formErrors.name}</div>
                 </div>
                 <div>
                     <h2>Choice of Size</h2>
@@ -150,9 +149,9 @@ export default function Form(){
                     <h2>Special Instructions</h2>
                     <input id='special-text' name='special' type='text' value={special} placeholder='Anything else?' onChange={onChange}/>
                 </div>
-                <footer>
+                <div>
                     <button id='order-button' type='submit' disabled={disabled}>Add to Order</button>
-                </footer>
+                </div>
             </form>
         </div>
     )
