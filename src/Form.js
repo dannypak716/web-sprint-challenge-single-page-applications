@@ -60,8 +60,9 @@ export default function Form(){
     const postNewOrder = newOrder => {
         axios.post('https://reqres.in/api/orders', newOrder)
           .then(res => {
-            setValues([res.data, ...newOrder]);
+            setValues([res.data]);
             setFormValues(initialFormValues);
+            setValues(initialFormValues);
             console.log(res.data);
           }).catch(err => {
             console.error(err);
@@ -150,7 +151,7 @@ export default function Form(){
                     <input id='special-text' name='special' type='text' value={special} placeholder='Anything else?' onChange={onChange}/>
                 </div>
                 <footer>
-                    <button id='order-button' type='submit'>Add to Order</button>
+                    <button id='order-button' type='submit' disabled={disabled}>Add to Order</button>
                 </footer>
             </form>
         </div>
