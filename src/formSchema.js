@@ -11,7 +11,7 @@ const formSchema = yup.object().shape({
         .oneOf(['small', 'medium', 'large'], 'Size is required!'),
     sauce: yup
         .string()
-        .oneOf(['original red', 'garlic ranch', 'bbq sauce', 'spinach alfredo'], 'Sauce is required!'),
+        .oneOf(['originalred', 'garlicranch', 'bbqsauce', 'spinachalfredo'], 'Sauce is required!'),
     special: yup
         .string()
         .trim(),

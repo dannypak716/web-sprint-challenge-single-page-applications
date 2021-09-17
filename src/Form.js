@@ -24,23 +24,12 @@ const initialFormErrors = {
     special: '',
 }
 
-const initialValues = {
-    name: '',
-    size: '',
-    sauce: '',
-    special: '',
-    pepperoni: false,
-    chicken: false,
-    olives: false,
-    onions: false,
-    mushrooms: false,
-    peppers: false
-};
+
 const initialDisabled = true;
 
 
 export default function Form(){
-    const [values, setValues] = useState(initialValues);
+    const [values, setValues] = useState([]);
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [disabled, setDisabled] = useState(initialDisabled);
@@ -61,11 +50,44 @@ export default function Form(){
           [name]: value
         })
       }
+
     const onChange = evt => {
         const { name, value, checked, type } = evt.target;
         const valueToUse = type === 'checkbox' ? checked : value;
         inputChange(name, valueToUse);
     }
+
+    const postNewOrder = newOrder => {
+        // 🔥 STEP 6- IMPLEMENT! ON SUCCESS ADD NEWLY CREATED FRIEND TO STATE
+        //    helper to [POST] `newFriend` to `http://buddies.com/api/friends`
+        //    and regardless of success or failure, the form should reset
+        axios.post('https://reqres.in/api/orders', newOrder)
+          .then(res => {
+            setValues([res.data, ...newOrder]);
+            setFormValues(initialFormValues);
+          }).catch(err => {
+            console.error(err);
+            setFormValues(initialFormValues);
+          })
+      }
+
+    const onSubmit = evt => {
+        evt.preventDefault()
+        formSubmit()
+    }
+    
+    const formSubmit = () => {
+        const newOrder = {
+          name: formValues.name.trim(),
+          size: formValues.size,
+          sauce: formValues.sauce,
+          special: formValues.special.trim(),
+          toppings: ['pepperoni', 'chicken', 'olives', 'onions', 'mushrooms', 'peppers'].filter(hobby => !!formValues[hobby])
+        }
+        // 🔥 STEP 8- POST NEW FRIEND USING HELPER
+        postNewOrder(newOrder);
+    }
+
 
 
     return(
@@ -97,7 +119,7 @@ export default function Form(){
                 <div>
                     <h2>Choice of Sauce</h2>
                     <p>Required!</p>
-                    <input type='radio' name='sauce' value='originalred' checked={sauce === 'originalred'} onChange={onChange}/>
+                    <input type='radio' name='sauce' value='originalred' checked={sauce === 'orignalred'} onChange={onChange}/>
                         <label>Original Red</label><br></br>
                     <input type='radio' name='sauce' value='garlicranch' checked={sauce === 'garlicranch'} onChange={onChange}/>
                         <label>Garlic Ranch</label><br></br>
@@ -108,18 +130,18 @@ export default function Form(){
                 </div>
                 <div>
                     <h2>Add Toppings</h2>
-                    <p>Choose up to 6</p>name
-                    <input type='checkbox' name='pepperoni' value={pepperoni} onChange={onChange}/>
+                    <p>Choose up to 6</p>
+                    <input type='checkbox' name='pepperoni' checked={pepperoni} onChange={onChange}/>
                         <label>Pepperoni</label>
-                    <input type='checkbox' name='chicken' value={chicken} onChange={onChange}/>
+                    <input type='checkbox' name='chicken' checked={chicken} onChange={onChange}/>
                         <label>Chicken</label>
-                    <input type='checkbox' name='olives' value={olives} onChange={onChange}/>
+                    <input type='checkbox' name='olives' checked={olives} onChange={onChange}/>
                         <label>Olives</label>
-                    <input type='checkbox' name='onions' value={onions} onChange={onChange}/>
+                    <input type='checkbox' name='onions' checked={onions} onChange={onChange}/>
                         <label>Onions</label>
-                    <input type='checkbox' name='mushrooms' value={mushrooms} onChange={onChange}/>
+                    <input type='checkbox' name='mushrooms' checked={mushrooms} onChange={onChange}/>
                         <label>Mushrooms</label>
-                    <input type='checkbox' name='peppers' value={peppers} onChange={onChange}/>
+                    <input type='checkbox' name='peppers' checked={peppers} onChange={onChange}/>
                         <label>Peppers</label>
                 </div>
                 <div>
@@ -127,7 +149,7 @@ export default function Form(){
                     <input id='special-text' name='special' type='text' value={special} placeholder='Anything else?' onChange={onChange}/>
                 </div>
                 <footer>
-                    <button id='order-button' disabled={disabled}>Add to Order</button>
+                    <button id='order-button' disabled={disabled} onSubmit={onSubmit}>Add to Order</button>
                 </footer>
             </form>
         </div>
