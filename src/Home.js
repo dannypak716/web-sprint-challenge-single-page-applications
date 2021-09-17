@@ -1,4 +1,6 @@
 import {Link} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+
 
 export default function Home(){
 
@@ -7,13 +9,13 @@ export default function Home(){
             <header>
                 <nav>
                 <h2>Lambda Eats</h2>
-                <Link to='/'><button className='home-button'>Home</button></Link>
+                <Link to='/'><button id='order-pizza'>Home</button></Link>
                 <button className='help-button'>Help</button>
                 </nav>
             </header>
             <div>
                 <h1>Get Your Favorite Food Delivered!</h1>
-                <Link to='/form'>Pizza?</Link>
+                <Link to='/pizza'>Pizza?</Link>
             </div>
         </div>
     )
