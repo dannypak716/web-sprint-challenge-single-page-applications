@@ -63,31 +63,33 @@ export default function Form(){
         //    and regardless of success or failure, the form should reset
         axios.post('https://reqres.in/api/orders', newOrder)
           .then(res => {
-            setValues([res.data, ...newOrder]);
+            setValues([res, ...newOrder]);
             setFormValues(initialFormValues);
           }).catch(err => {
             console.error(err);
             setFormValues(initialFormValues);
           })
       }
+    
+    const formSubmit = () => {
+        const newOrder = {
+          name: formValues.name.trim(),
+          size: formValues.size.trim(),
+          sauce: formValues.sauce.trim(),
+          special: formValues.special.trim(),
+          toppings: ['pepperoni', 'chicken', 'olives', 'onions', 'mushrooms', 'peppers'].filter(topping => !!formValues[topping])
+        }
+        postNewOrder(newOrder);
+    }
 
     const onSubmit = evt => {
         evt.preventDefault()
         formSubmit()
     }
-    
-    const formSubmit = () => {
-        const newOrder = {
-          name: formValues.name.trim(),
-          size: formValues.size,
-          sauce: formValues.sauce,
-          special: formValues.special.trim(),
-          toppings: ['pepperoni', 'chicken', 'olives', 'onions', 'mushrooms', 'peppers'].filter(hobby => !!formValues[hobby])
-        }
-        // 🔥 STEP 8- POST NEW FRIEND USING HELPER
-        postNewOrder(newOrder);
-    }
 
+    useEffect(() => {
+        schema.isValid(formValues).then(valid => setDisabled(!valid))
+      }, [formValues])
 
 
     return(
@@ -111,21 +113,22 @@ export default function Form(){
                     <h2>Choice of Size</h2>
                     <p>Required!</p>
                     <select id='size-dropdown' name='size' value={size} onChange={onChange}>
-                        <option value='small'>Small</option>
-                        <option value='medium'>Medium</option>
-                        <option value='large'>Large</option>
+                        <option value=''>Select an option</option>
+                        <option value='Small'>Small</option>
+                        <option value='Medium'>Medium</option>
+                        <option value='Large'>Large</option>
                     </select>
                 </div>
                 <div>
                     <h2>Choice of Sauce</h2>
                     <p>Required!</p>
-                    <input type='radio' name='sauce' value='originalred' checked={sauce === 'orignalred'} onChange={onChange}/>
+                    <input type='radio' name='sauce' value='originalred' onChange={onChange}/>
                         <label>Original Red</label><br></br>
-                    <input type='radio' name='sauce' value='garlicranch' checked={sauce === 'garlicranch'} onChange={onChange}/>
+                    <input type='radio' name='sauce' value='garlicranch' onChange={onChange}/>
                         <label>Garlic Ranch</label><br></br>
-                    <input type='radio' name='sauce' value='bbqsauce' checked={sauce === 'bbqsauce'} onChange={onChange}/>
+                    <input type='radio' name='sauce' value='bbqsauce' onChange={onChange}/>
                         <label>BBQ Sauce</label><br></br>
-                    <input type='radio' name='sauce' value='spinachalfredo' checked={sauce === 'spinachalfredo'} onChange={onChange}/>
+                    <input type='radio' name='sauce' value='spinachalfredo' onChange={onChange}/>
                         <label>Spinach Alfredo</label><br></br>
                 </div>
                 <div>
@@ -149,7 +152,7 @@ export default function Form(){
                     <input id='special-text' name='special' type='text' value={special} placeholder='Anything else?' onChange={onChange}/>
                 </div>
                 <footer>
-                    <button id='order-button' disabled={disabled} onSubmit={onSubmit}>Add to Order</button>
+                    <button id='order-button' onSubmit={onSubmit}>Add to Order</button>
                 </footer>
             </form>
         </div>
